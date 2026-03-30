@@ -1,4 +1,4 @@
-# Worscpace Knowledge Base UI
+# Worscpace Knowledge Base UI (React)
 
 A responsive, pixel-perfect React application that implements the "Worscpace" Knowledge Base dashboard functionality. Built entirely with functional components, React Hooks, and Tailwind CSS.
 
