@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Drawer from './Drawer';
 
 // Reusable Form Input Component
-const FormInput = ({ label, placeholder, isRequired, isTextArea }) => (
+const FormInput = ({ label, placeholder, isRequired, isTextArea, value, onChange }) => (
   <div>
     <label className="block text-[14px] font-medium text-gray-700 mb-1.5">
       {label}{isRequired && <span className="text-red-500 ml-0.5">*</span>}
@@ -11,12 +11,16 @@ const FormInput = ({ label, placeholder, isRequired, isTextArea }) => (
       <textarea 
         placeholder={placeholder} 
         rows={4}
+        value={value}
+        onChange={onChange}
         className="w-full border border-gray-300 rounded-lg px-3.5 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary placeholder-gray-400 resize-none transition-shadow"
       />
     ) : (
       <input 
         type="text" 
         placeholder={placeholder} 
+        value={value}
+        onChange={onChange}
         className="w-full border border-gray-300 rounded-lg px-3.5 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary placeholder-gray-400 transition-shadow"
       />
     )}
@@ -44,7 +48,27 @@ const FormSelect = ({ label, options, isRequired }) => (
   </div>
 );
 
-const CreateNewModal = ({ isOpen, onClose }) => {
+const CreateNewModal = ({ isOpen, onClose, onCreate }) => {
+  const [name, setName] = useState('');
+  const [description, setDescription] = useState('');
+
+  const handleCreate = () => {
+    if (!name.trim()) return;
+    
+    const today = new Date();
+    const formattedDate = `${String(today.getDate()).padStart(2, '0')}/${String(today.getMonth() + 1).padStart(2, '0')}/${today.getFullYear()}`;
+
+    onCreate({
+      title: name,
+      description: description,
+      date: formattedDate
+    });
+    
+    setName('');
+    setDescription('');
+    onClose();
+  };
+
   return (
     <Drawer
       isOpen={isOpen}
@@ -60,7 +84,7 @@ const CreateNewModal = ({ isOpen, onClose }) => {
             Cancel
           </button>
           <button 
-            onClick={onClose}
+            onClick={handleCreate}
             className="px-6 py-2.5 text-sm font-semibold text-white bg-primary rounded-lg hover:bg-indigo-700 transition-colors shadow-sm focus:ring-4 focus:ring-primary/20 focus:outline-none"
           >
             Create
@@ -72,11 +96,15 @@ const CreateNewModal = ({ isOpen, onClose }) => {
         label="Name (Cannot be edited later)" 
         placeholder="Name" 
         isRequired={true} 
+        value={name}
+        onChange={(e) => setName(e.target.value)}
       />
       <FormInput 
         label="Description" 
         placeholder="Description" 
         isTextArea={true} 
+        value={description}
+        onChange={(e) => setDescription(e.target.value)}
       />
       <FormSelect 
         label="Vector Store" 

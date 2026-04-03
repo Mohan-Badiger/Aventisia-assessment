@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import MainLayout from '../layouts/MainLayout';
 import Card from '../components/Card';
 import CreateNewModal from '../components/CreateNewModal';
@@ -7,11 +7,31 @@ const KnowledgeBaseHome = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   // Exact replication of the dummy items from the image
-  const mockData = Array(6).fill({
+  const defaultMockData = Array(6).fill({
     title: 'Test',
     description: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy",
     date: '14/07/2025'
   });
+
+  const [cards, setCards] = useState(() => {
+    const savedCards = localStorage.getItem('knowledgeBaseCards');
+    if (savedCards) {
+      try {
+        return JSON.parse(savedCards);
+      } catch (e) {
+        console.error('Error parsing localStorage items');
+      }
+    }
+    return defaultMockData;
+  });
+
+  useEffect(() => {
+    localStorage.setItem('knowledgeBaseCards', JSON.stringify(cards));
+  }, [cards]);
+
+  const handleCreateNew = (newCard) => {
+    setCards([newCard, ...cards]);
+  };
 
   return (
     <MainLayout>
@@ -47,7 +67,7 @@ const KnowledgeBaseHome = () => {
 
         <div className="flex-1 p-10 overflow-auto">
           <div className="grid grid-cols-1 xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-2 gap-7">
-            {mockData.map((item, index) => (
+            {cards.map((item, index) => (
               <Card
                 key={index}
                 title={item.title}
@@ -60,7 +80,7 @@ const KnowledgeBaseHome = () => {
 
         {/* Bottom Pagination Footer */}
         <div className="px-10 py-4 bg-white border-t border-gray-200 flex items-center justify-between text-[14px] text-gray-700 font-medium">
-          <div>6 rows</div>
+          <div>{cards.length} rows</div>
           <div className="flex items-center space-x-8">
             <div className="flex items-center space-x-3">
               <span>Rows per page</span>
@@ -96,7 +116,7 @@ const KnowledgeBaseHome = () => {
         </div>
       </div>
 
-      <CreateNewModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
+      <CreateNewModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} onCreate={handleCreateNew} />
     </MainLayout>
   );
 };
