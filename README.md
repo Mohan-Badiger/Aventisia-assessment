@@ -41,8 +41,6 @@ src/
 2.  **Install dependencies**
     ```sh
     npm install
-    # or
-    pnpm install
     ```
 
 3.  **Run the local development server**
