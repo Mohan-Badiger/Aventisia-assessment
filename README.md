@@ -34,7 +34,7 @@ src/
 └── index.css             # Root Tailwind CSS entry
 ```
 
-## 🛠️ Installation & Setup
+## Installation & Setup
 
 1.  **Clone the repository / open the directory**
 
