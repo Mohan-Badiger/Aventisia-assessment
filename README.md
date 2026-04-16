@@ -49,9 +49,3 @@ src/
     ```
 
 4.  **Open the Local URL shown** (typically `http://localhost:5173/`)
-
-## 💡 Usage
-
-*   **Navigation:** While currently static mapping, the `Sidebar` maintains internal active-path structures that can be linked straight into React Router.
-*   **Create New Entity:** Click the primary `Create New` action located in the upper right. The semantic form pop-up will launch. Dismiss via the overlay, Escape Key, or the Cancel button.
-*   **Modifying The Theme:** Navigate directly to `tailwind.config.js` to change the `primary` or `secondary` palette hashes for instant real-time theme shifts over the entire structure.
